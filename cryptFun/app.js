@@ -63,7 +63,16 @@ const crypt = (filename, secret) => {
         for (let i = 0; i < data.length; i++)
             data[i] = ~data[i];
 
-        fs.writeFileSync("new_" + filename, data);
+        rl.question("Are you sure you want to overwrite this file? (y/n) ", (answer) => {
+            if(answer == "y")
+            {
+                fs.writeFileSync(filename, data);
+                rl.close();
+            }
+            else {
+                rl.close();
+            }
+        });
     });
 }
 
@@ -74,8 +83,8 @@ var main = function () {
         let secret = "";
         rl.question("Enter a password: ", (pass) => {
             secret = pass;
+            rl.pause();
             crypt(file, secret);
-            rl.close();
         });
     });
 }
